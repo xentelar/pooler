@@ -450,7 +450,7 @@ pooler_groups_test_() ->
                      ],
              application:set_env(pooler, pools, Pools),
              %% error_logger:delete_report_handler(error_logger_tty_h),
-             pg2:start(),
+             pg:start(),
              application:start(pooler)
      end,
      fun(_X) ->
@@ -500,7 +500,7 @@ pooler_groups_test_() ->
       {"take member from empty group",
        fun() ->
                %% artificially empty group member list
-               [ pg2:leave(group_1, M) || M <- pg2:get_members(group_1) ],
+               [ pg:leave(group_1, M) || M <- pg:get_members(group_1) ],
                ?assertEqual(error_no_members, pooler:take_group_member(group_1))
        end},
 
