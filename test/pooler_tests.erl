@@ -450,7 +450,7 @@ pooler_groups_test_() ->
                      ],
              application:set_env(pooler, pools, Pools),
              %% error_logger:delete_report_handler(error_logger_tty_h),
-             pg:start(),
+             pg:start_link(),
              application:start(pooler)
      end,
      fun(_X) ->

@@ -386,7 +386,6 @@ handle_info(timeout, #pool{group = undefined} = Pool) ->
     %% ignore
     {noreply, Pool};
 handle_info(timeout, #pool{group = Group} = Pool) ->
-    ok = pg:create(Group),
     ok = pg:join(Group, self()),
     {noreply, Pool};
 handle_info({'DOWN', MRef, process, Pid, Reason}, State) ->
@@ -753,7 +752,7 @@ remove_pid(Pid, Pool) ->
             Pool1#pool{consumer_to_pid = cpmap_remove(Pid, CPid, CPMap),
                        all_members = dict:erase(Pid, AllMembers)};
         error ->
-            error_logger:error_report({{pool, PoolName}, unknown_pid, Pid, <<"unknown pid">>}),
+            error_logger:error_report({{pool, PoolName}, unknown_pid, Pid, ?GET_STACKTRACE}),
             send_metric(Pool, events, unknown_pid, history),
             Pool
     end.
